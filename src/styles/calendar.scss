@@ -1,0 +1,144 @@
+@import "variables";
+.calendarContainer {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows:  50px repeat(6, 1fr);
+  grid-gap: 3px;
+  padding: 5px;
+
+  border: 2px solid $dark_border_accent;
+  width: 90vw;
+  min-height: 847px;
+  max-height: 847px;
+  margin: 0 auto;
+  border-radius: 5px;
+  justify-content: stretch;
+
+  .outerContainer {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid $border_accent;
+  
+    .appointmentContainer {
+      position: absolute;
+
+      .schedualPopupContainter:before {
+        position: absolute;
+        content: '';
+        left: -20px;
+        top: -1px;
+        border-style: solid;
+        border-width: 10px 20px 10px 0px;
+        border-color: transparent $dark_border_accent transparent transparent;
+      }
+
+      .cells {
+        overflow: hidden;
+        max-height: 125px;
+        min-height: 125px;
+        overflow: visible;
+
+        .date {
+          margin-bottom: 0px;
+          position: relative;
+          z-index: -1;
+        }
+        .schdate {
+          font-size: .75rem;
+          line-height: 90%;
+          margin: 2px;
+          border-radius: 5px;
+          padding: 2px;
+          background-color: $secondary_blue; 
+          border: 1px solid $white_var;
+
+          &:hover {
+            cursor: pointer;
+            transform: scale(1.2);
+            z-index: 1000000;
+            box-shadow: 5px 5px 5px $header_background;
+            overflow: visible;
+          }
+        }
+
+        .pending {
+          font-size: .75rem;
+          line-height: 100%;
+          margin: 2px;
+          border-radius: 5px;
+          padding: 2px;
+          background-color: $white_var; 
+          border: 1px solid black;
+        }
+
+        .numberMore {
+          font-size: .75rem;
+          line-height: 100%;
+          margin: 2px;
+          border-radius: 5px;
+          padding: 2px;
+
+          &:hover {
+            cursor: pointer;
+            transform: scale(1.2) translate(11px);
+          }
+        }
+      }
+      .expanded {
+        background-color: $white_var;
+        height: max-content;
+        border-bottom: 3px solid  $dark_border_accent;
+        border-radius: 5px;
+
+        .date {
+          margin-bottom: 0px;
+        }
+
+        .schdate {
+          font-size: .75rem;
+          line-height: 90%;
+          margin: 2px;
+          border-radius: 5px;
+          padding: 2px;
+          background-color: $secondary_blue; 
+          border: 1px solid $white_var;
+
+          &:hover {
+            cursor: pointer;
+            transform: scale(1.2);
+            z-index: 1000000;
+            box-shadow: 5px 5px 5px $header_background;
+            overflow: visible;
+          }
+        }
+
+        .pending {
+          font-size: .75rem;
+          line-height: 100%;
+          margin: 2px;
+          border-radius: 5px;
+          padding: 2px;
+          background-color: $white_var; 
+          border: 1px solid black;
+        }
+
+        .numberMore {
+          font-size: .75rem;
+          line-height: 100%;
+          margin: 2px;
+          border-radius: 5px;
+          padding: 2px;
+
+          &:hover {
+            cursor: pointer;
+            transform: scale(1.2) translate(11px);
+          }
+        }
+      }
+    }
+  }
+
+  .daysOfWeek {
+    text-align: center;
+  }
+}

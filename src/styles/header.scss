@@ -1,0 +1,32 @@
+@import "variables";
+header {
+  background-color: $header_background; 
+  border-radius: 5px;
+  margin-bottom: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid $border_accent;
+  display: flex;
+  justify-content: space-between;
+
+  .leftContainer {
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+
+  }
+
+  .rightContainer {
+    width: 300px;
+    text-align: right;
+  }
+
+  a {
+    text-decoration: none;
+    color: $main_text_color;
+  }
+}
+
+
+
+

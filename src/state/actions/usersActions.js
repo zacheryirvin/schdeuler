@@ -9,7 +9,7 @@ import {
 } from '../constants.js'
 
 export const addUser = (user) => {
-  const temp = new User(uuidv4(), user.first_name, user.last_name, user.phone_number, user.address); 
+  const temp = new User(uuidv4(), user.first_name, user.last_name, user.email, user.phone_number, user.address); 
   return {type: ADDUSER, payload: {id: temp.Id, temp}};
 }
 

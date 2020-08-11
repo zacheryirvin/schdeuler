@@ -3,7 +3,14 @@ import {connect} from 'react-redux'
 import {v4 as uuidv4} from 'uuid'
 import {PropTypes} from 'prop-types'
 
-import {addEstimateAppointment, confirmEstimateAppointment} from '../state/actions/appointmentActions.js'
+import {
+  addEstimateAppointment,
+  confirmEstimateAppointment,
+  editEstimateAppoinment,
+  addWorkingAppointment,
+  confirmWorkingAppointment,
+  editWorkingAppointment
+} from '../state/actions/appointmentActions.js'
 
 const NewEstimateForm = (props) => {
 
@@ -21,17 +28,30 @@ const NewEstimateForm = (props) => {
     e.preventDefault();
     props.addEstimateAppointment(userInput);
     setUserInput({user_id: uuidv4(), scheduled_date: "", confirmed: false})
-    console.log(props.appointments)
   }
 
   const edit = (e) => {
     e.preventDefault();
-    props.confirmEstimateAppointment(tempId);
-    console.log(props.appointments)
+    props.confirmWorkingAppointment(tempId);
   }
+
+  const changeDate = (e) => {
+    e.preventDefault();
+    props.editWorkingAppointmentAppoinment(tempId, userInput.scheduled_date)
+  }
+
+  const addWorkApp = (e) => {
+    e.preventDefault();
+    const toSend = {estimate_id: tempId,
+      user_id: '3a6b7cff-f6ca-4af5-9553-2cef57ab542b',
+      scheduled_date: userInput.scheduled_date,
+      confirmed: false
+    }
+    props.addWorkingAppointment(toSend)
+  }
+
   const tempChange = (e) => {
     const value = e.target.value
-    console.log(value)
     setTempId(value)
   }
 
@@ -41,9 +61,11 @@ const NewEstimateForm = (props) => {
         <label className="textInputLabel" htmlFor="date">Date: </label>
         <input id="date" className="dateInputField" type="date" value={userInput.scheduled_date} onChange={gatherInput}/>
       </div>
-    <input type="test" onChange={tempChange}/>
+    <input type="text" onChange={tempChange}/>
     <button className="submit" onClick={submit}>Submit</button>
-    <button onClick={edit}>test</button>
+    <button onClick={edit}>confirm</button>
+    <button onClick={changeDate}>Change</button>
+    <button onClick={addWorkApp}>Add Work</button>
     </form>
   )
 }
@@ -53,7 +75,15 @@ const mstp = state => ({
 })
 
 NewEstimateForm.propTypes = {
-  addEstimateAppointment: PropTypes.func.isRequired
+  addEstimateAppointment: PropTypes.func.isRequired,
+  confirmEstimateAppointment: PropTypes.func.isRequired,
+  editEstimateAppoinment: PropTypes.func.isRequired
 }
 
-export default connect(mstp, {addEstimateAppointment, confirmEstimateAppointment})(NewEstimateForm);
+export default connect(mstp,
+  {
+    addEstimateAppointment, 
+    confirmEstimateAppointment,
+    editEstimateAppoinment,
+    addWorkingAppointment
+  })(NewEstimateForm);

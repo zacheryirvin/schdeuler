@@ -18,6 +18,7 @@ const IndexPage = (props) => {
       <Link to="/page-2/">Go to page 2</Link> <br />
       <Link to="/newUserForm">New User</Link>
       <Link to="/newEstimateForm">New Estimate</Link>
+      <Link to="/scheduleAppointment"> App </Link>
     </Layout>
   )
 }

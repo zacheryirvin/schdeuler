@@ -37,12 +37,29 @@ export class EstimateAppointment extends Appointment {
 }
 
 export class WorkingAppointment extends Appointment {
-  constructor(id, estimate_id, user_id, scheduled_date, confirmed) {
+  constructor(id, estimate_id, user_id, scheduled_date, confirmed, completed = false, paid = false) {
     super(id, user_id, scheduled_date, confirmed);
     this.estimate_id = estimate_id;
+    this.completed = completed
+    this.paid = paid
   }
 
   get estimateId() {
     return this.estimate_id;
+  }
+
+  get isCompleted() {
+    return this.completed;
+  }
+  set isCompleted(val) {
+    this.completed = val;
+  }
+
+  get isPaid() {
+    return this.paid;
+  }
+
+  set isPaid(val) {
+    this.paid = val;
   }
 }
