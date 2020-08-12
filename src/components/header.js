@@ -10,9 +10,6 @@ const Header = ({ siteTitle }) => (
       <Link to="/">Home</Link>
       <Link to="/scheduleAppointment">Scheduler</Link>
     </div>
-    <div className="rightContainer">
-      <Link to="/newUserForm">SignUp</Link>
-    </div>
   </header>
 )
 

@@ -6,7 +6,8 @@
   grid-gap: 3px;
   padding: 5px;
 
-  border: 2px solid $dark_border_accent;
+  border: 1px solid $dark_border_accent;
+  border-top: none;
   width: 90vw;
   min-height: 847px;
   max-height: 847px;
@@ -22,14 +23,23 @@
     .appointmentContainer {
       position: absolute;
 
-      .schedualPopupContainter:before {
+      .rightschedualPopupContainter:before {
         position: absolute;
         content: '';
         left: -20px;
-        top: -1px;
+        top: -.5px;
         border-style: solid;
         border-width: 10px 20px 10px 0px;
         border-color: transparent $dark_border_accent transparent transparent;
+      }
+
+      .leftschedualPopupContainer:before {
+        position: absolute;
+        content: '';
+        right: -20px;
+        border-style: solid;
+        border-width: 10px 0px 10px 20px;
+        border-color: transparent transparent transparent $dark_border_accent;
       }
 
       .cells {

@@ -1,4 +1,5 @@
 import React from 'react'
+import {PropTypes} from 'prop-types'
 
 import '../../styles/calendar.scss'
 
@@ -6,15 +7,19 @@ import DaysOfWeek from './daysOfWeek.js'
 import CellDays from './cellDays.js'
 
 const Calender = (props) => {
-  const columns = new Array(7).fill(0)
-  const rows = new Array(6).fill(0)
 
   return (
     <div className="calendarContainer">
       <DaysOfWeek/>
-      <CellDays/>
+      <CellDays data={props.data}/>
     </div>
   )
 }
 
 export default Calender;
+
+Calender.propTypes = {
+  data: PropTypes.objectOf(
+    PropTypes.array
+  )
+}

@@ -1,11 +1,11 @@
 @import "variables";
 header {
-  background-color: $header_background; 
+  // background-color: $header_background;
   border-radius: 5px;
-  margin-bottom: 15px;
+  // margin-bottom: 15px;
   padding-top: 5px;
   padding-bottom: 5px;
-  border-bottom: 1px solid $border_accent;
+  border-bottom: 1px solid $dark_border_accent;
   display: flex;
   justify-content: space-between;
 

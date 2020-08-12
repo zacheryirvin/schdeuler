@@ -23,7 +23,7 @@ const initialState = {
 
 for (let i = 0; i < 5; i++) {
   let date = new Date();
-  let friday = new Date(2020, 7, 14)
+  let friday = new Date(2020, 8, 14)
   date.setHours(i)
   friday.setHours(i)
   const temp = (new EstimateAppointment(uuidv4(), null, date, null));  
@@ -76,8 +76,12 @@ const appointmentReducer = (state = initialState, action) => {
       return rcopy
     case EDITESTIMATEAPPOINTMENT:
       const eestimateId = action.payload.id;
+      const neweestimateId = action.payload.newId;
       const ecopy = {...state}
-      ecopy.estimateAppointments[eestimateId].scheduled_date = action.payload.scheduled_date
+      ecopy.estimateAppointments[eestimateId].confirmed = null 
+      ecopy.estimateAppointments[eestimateId].user_id = null
+      ecopy.estimateAppointments[neweestimateId].user_id = action.payload.user_id
+      ecopy.estimateAppointments[neweestimateId].confirmed = action.payload.confirmed
       return ecopy;
     case ADDWORKINGAPPOINTMENT:
       const newWorkingAppointmentId = action.payload.id;

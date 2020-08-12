@@ -27,8 +27,8 @@ export const registerEstimateAppointment = (id, user_id) => {
   return {type: REGISTERESTIMATEAPPOINTMENT, payload: {id: id, confirmed: false, user_id}}
 }
 
-export const editEstimateAppoinment = (id, scheduled_date) => {
-  return {type: EDITESTIMATEAPPOINTMENT, payload: {id: id, scheduled_date}}
+export const editEstimateAppoinment = (id, newId, user_id) => {
+  return {type: EDITESTIMATEAPPOINTMENT, payload: {id: id, newId, user_id, confirmed: false}}
 }
 
 export const addWorkingAppointment = (app) => {

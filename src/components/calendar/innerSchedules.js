@@ -1,17 +1,26 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {PropTypes} from 'prop-types';
 import {v4 as uuidv4} from 'uuid'
 import SchedulePopup from './schedulePopUp.js'
 
 const InnerSchedule = (props) => {
-  const expanded = props.expanded
+  const [expanded, setExpanded] = useState({id: null, ex: false});
   const [popUp, setPopUp] = useState({id: null, clicked: false, left: null, width: null, date:""});
-  console.log(props.expanded)
 
+  useEffect(() => {
+    props.id !== expanded.id && expanded.id !== null
+    ? setExpanded({...expanded, ex: false})
+    : null
+  },[props.id, props.rerender])
+  
   const expand = (e) => {
     e.preventDefault();
-    const parentId = e.target.parentElement.id
-    props.passExpand(parentId);
+    const parentClass = e.target.parentElement.className
+    const id = e.target.parentElement.id
+    parentClass === "cells" ? setExpanded({id, ex: true})
+      : setExpanded({id, ex: false})
+    // expanded === false ? setExpanded(true) : setExpanded(false)
+    props.passExpand(id);
   }
 
   const cancel = () => {
@@ -20,10 +29,20 @@ const InnerSchedule = (props) => {
 
   const getData = (e) => {
     const data = e.target.getBoundingClientRect()
+    const outData = e.target.parentElement.parentElement.parentElement.getBoundingClientRect()
+    // console.log(data)
     const id = e.target.id
     const date = e.target.innerHTML
+    const parentId = e.target.parentElement.id
     popUp.clicked === false
-    ? setPopUp({id, clicked: true, left: data.left, width: data.width, date})
+      ? setPopUp({
+        id,
+        clicked: true,
+        left: data.left,
+        width: data.width,
+        outWidth: outData.width,
+        date
+      })
     : setPopUp({...popUp, clicked: false});
   }
 
@@ -31,7 +50,7 @@ const InnerSchedule = (props) => {
   let counter = 0
   return (
     <>
-      {expanded
+      {expanded.ex
         ? 
           <>
             {props.eAppointments.map((y, ind) => {
@@ -44,7 +63,10 @@ const InnerSchedule = (props) => {
                     onClick={y.confirmed === null ? getData : null}
                     >{y.scheduled_date.toLocaleString()} </div> 
                     {popUp.clicked
-                    ? <SchedulePopup popLocation={popUp} check_id={y.id} cancel={cancel}/>
+                      ? <SchedulePopup popLocation={popUp}
+                      check_id={y.id} cancel={cancel}
+                      updateRerenderId={props.updateRerenderId}
+                      />
                     : null
                     }
                   </>
@@ -69,7 +91,11 @@ const InnerSchedule = (props) => {
               className={y.confirmed === null ? "schdate" : "pending"}
               >{y.scheduled_date.toLocaleString()}</div>
                 {popUp.clicked
-                ? <SchedulePopup popLocation={popUp} check_id={y.id} cancel={cancel}/>
+                  ? <SchedulePopup popLocation={popUp}
+                  check_id={y.id}
+                  cancel={cancel}
+                  updateRerenderId={props.updateRerenderId}
+                  />
                 : null
                 }
               </>
@@ -87,6 +113,9 @@ InnerSchedule.propTypes = {
   index: PropTypes.number,
   nullCells: PropTypes.number,
   passExpand: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
+  rerender: PropTypes.number,
+  updateRerenderId: PropTypes.func
 }
 
 export default InnerSchedule;

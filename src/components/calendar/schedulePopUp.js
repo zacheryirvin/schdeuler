@@ -2,7 +2,10 @@ import React, {useState} from 'react'
 import {PropTypes} from 'prop-types'
 import {connect} from 'react-redux'
 
-import {registerEstimateAppointment} from '../../state/actions/appointmentActions.js'
+import {
+  registerEstimateAppointment,
+  editEstimateAppoinment,
+  } from '../../state/actions/appointmentActions.js'
 
 import ScheduleForm from './scheduleForm.js'
 import ErrorPop from './errorPop.js'
@@ -12,18 +15,20 @@ const SchedulePopup = ({popLocation,
   check_id,
   cancel,
   registerEstimateAppointment,
+  editEstimateAppoinment,
   appointments,
+  updateRerenderId,
   current_user,
 }) => {
   const id = popLocation.id
-  const errorMsg = "Only one appointment is allowed at a time per user."
+  const errorMsg = "Only one appointment is allowed at a time per user.If you would like to reschedule click the reschedule button"
 
   const [viewConfirm, setViewConfirm] = useState(
     current_user.id
     ? true
     : false
   )
-
+  const [reschedual, setReschedual] = useState(false)
   const [errorPop, setErrorPop] = useState(false)
 
   const changeConfirm = () => {
@@ -31,14 +36,19 @@ const SchedulePopup = ({popLocation,
     setViewConfirm(!check)
   }
 
+  const changeReschedual = e => {
+    setReschedual(true)
+    changeErrorPop()
+  }
+
   const setAppointmentCheck = () => {
+    let returnBool = true
     for(const key in appointments) {
       if(appointments[key].user_id === current_user.id) {
-        return false
+        returnBool = false
       }
-      console.log(appointments[key].user_id, current_user.id)
-      return true
     }
+    return returnBool
   }
 
 
@@ -48,7 +58,20 @@ const SchedulePopup = ({popLocation,
 
   const confirm = (e) => {
     e.preventDefault()
-    if(setAppointmentCheck()) {
+    const outerParentId = e.target.parentElement.parentElement.parentElement.parentElement.id
+    if(reschedual) {
+      let oldId
+      for(const key in appointments) {
+        if(appointments[key].user_id === current_user.id) {
+          oldId = key
+          break
+        }
+      }
+      editEstimateAppoinment(oldId, id, current_user.id)
+      setReschedual(false)
+      updateRerenderId(outerParentId)
+      cancel()
+    }else if(setAppointmentCheck()) {
       registerEstimateAppointment(id, current_user.id)
       cancel();
     } else {
@@ -61,12 +84,11 @@ const SchedulePopup = ({popLocation,
     setErrorPop(!currentState)
   }
 
-  const styling = {
+  const rightstyling = {
     position: "absolute",
     fontSize: "1rem",
     width: 300,
     border: "1px solid lightgray",
-    // top: popLocation.top - popLocation.top,
     left: popLocation.width + 5,
     backgroundColor: "white",
     zIndex: 1000,
@@ -75,11 +97,32 @@ const SchedulePopup = ({popLocation,
     borderRadius: 5,
   } 
 
+  const leftstyling = {
+    position: "absolute",
+    fontSize: "1rem",
+    width: 300,
+    border: "1px solid lightgray",
+    right: popLocation.width + 5,
+    backgroundColor: "white",
+    zIndex: 1000,
+    marginTop: -24,
+    padding: 3,
+    borderRadius: 5,
+  }
+
   return (
     <>
     {id === check_id
       ?
-      <div className="schedualPopupContainter" style={styling}>
+      <div className={
+        popLocation.left > popLocation.outWidth * 4
+        ? "leftschedualPopupContainer"
+        : "rightschedualPopupContainter"
+      } style={
+        popLocation.left > popLocation.outWidth * 4 
+        ? leftstyling
+        : rightstyling
+      }>
         <article className="schedualPopup">
           <p className="dateMsg">Schedule Estimate on {popLocation.date} </p>
           {viewConfirm && !errorPop
@@ -90,7 +133,8 @@ const SchedulePopup = ({popLocation,
               </div>
             )
             : errorPop
-            ? <ErrorPop changeErrorPop={changeErrorPop} msg={errorMsg}/>
+            ? <ErrorPop changeErrorPop={changeErrorPop}
+              changeReschedual={changeReschedual} msg={errorMsg}/>
             : <ScheduleForm cancel={innercancel} changeConfirm={changeConfirm} id={id}/>
           }
         </article>
@@ -107,7 +151,10 @@ const mstp = state => ({
 })
 
 export default connect(mstp,
-  {registerEstimateAppointment}
+  {
+    registerEstimateAppointment,
+    editEstimateAppoinment,
+  }
 )(SchedulePopup)
 
 SchedulePopup.propTypes = {
@@ -117,6 +164,7 @@ SchedulePopup.propTypes = {
     top: PropTypes.number,
     left: PropTypes.number,
     width: PropTypes.number,
+    outWidth: PropTypes.number,
     date: PropTypes.string,
   }),
   check_id: PropTypes.number,
@@ -130,6 +178,9 @@ SchedulePopup.propTypes = {
       scheduled_date: PropTypes.object,
       confirmed: PropTypes.bool
     })
-  )
+  ),
+  editEstimateAppoinment: PropTypes.func.isRequired,
+  updateRerenderId: PropTypes.func.isRequired
+
 }
 

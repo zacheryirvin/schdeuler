@@ -1,21 +1,27 @@
 import React, {useState} from 'react'
+import {PropTypes} from 'prop-types'
 import {connect} from 'react-redux'
 import {EstimateAppointment} from '../../classes/Appointments.js'
 import {
   startOfMonth,
   getDaysInMonth,
   getDay,
+  addMonths,
+  getMonth
 } from 'date-fns'
 
 import {v4 as uuidv4} from 'uuid'
 import InnerSchedule from './innerSchedules.js'
 
 const CellDays = (props) => {
-  // for(const prop in props.estimateAppointments) {
-    // console.log(props.estimateAppointments[prop].scheduled_date);
-  // }
-
-  const [toExpand, setToExpand] = useState({id: "", expanded: false})
+  const [viewMonth, setViewMonth] = useState(
+    props.data.find(edge => {
+      return edge.node.month_number === getMonth(new Date())
+    })
+  ) 
+  const [toExpand, setToExpand] = useState({id: "",
+    rerenderId: "",
+    expanded: false})
 
   const updateExpand = (id) => {
     let copy = {...toExpand};
@@ -27,7 +33,9 @@ const CellDays = (props) => {
     }
   }
 
-  console.log("toExpand", toExpand)
+  const updateRerenderId = (id) => {
+    setToExpand({...toExpand, rerenderId: id})
+  }
 
   const eAppointments = []
   for (const prop in props.estimateAppointments) {
@@ -37,28 +45,16 @@ const CellDays = (props) => {
 
   eAppointments.sort((a, b) => a.scheduled_date - b.scheduled_date)
   // eAppointments.forEach(x => console.log(x.scheduled_date.getDate()))
-  // console.log(getDay(startOfMonth(new Date())))
-  let numOfDays = getDaysInMonth( new Date());
-  let calCels = []
-  let nullCells = 0;
-  let j = 0;
-  for(let i = 0; i < numOfDays; i++) {
-    if(i >= getDay(startOfMonth(new Date()))) {
-      j++;
-    } else {
-      numOfDays++
-      nullCells = i
-    }
-    calCels.push(j);
-  }
-
+  const appointmentsToShow = eAppointments.filter(x => {
+    return getMonth(x.scheduled_date) === viewMonth.node.month_number
+  })
   const checkVal = (e) => {
     console.log(new Date(e.target.innerHTML));
   }
 
   return (
   <>
-    {calCels.map((x, i) => {
+    {viewMonth.node.month_calendar_cells.map((x, i) => {
       const id = i; 
       return (
         <div key={id} className="outerContainer">
@@ -73,11 +69,12 @@ const CellDays = (props) => {
             {x > 0 ? (
               <> 
                 <p className="date">{x}</p> 
-                <InnerSchedule eAppointments={eAppointments} index={i}
-                nullCells={nullCells}
+                <InnerSchedule eAppointments={appointmentsToShow} index={i}
+                nullCells={viewMonth.node.month_calendar_null_cells}
                 passExpand={updateExpand}
-                expanded={toExpand.expanded ? true : false}
-                />
+                id={toExpand.id}
+                updateRerenderId={updateRerenderId} 
+              />
               </>
             ): null}
             </div>
@@ -96,3 +93,8 @@ export default connect(
   mstp,
   null
 )(CellDays);
+
+CellDays.propTypes = {
+  estimateAppointments: PropTypes.array,
+  data: PropTypes.object
+}
