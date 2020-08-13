@@ -59,8 +59,8 @@ const InnerSchedule = (props) => {
                 return (
                   <>
                     <div key={y.id} id={y.id} 
-                    className={y.confirmed === null ? "schdate" : "pending"}
-                    onClick={y.confirmed === null ? getData : null}
+                    className={y.confirmed !== true ? "schdate" : "pending"}
+                    onClick={y.confirmed !== true ? getData : null}
                     >{y.scheduled_date.toLocaleString()} </div> 
                     {popUp.clicked
                       ? <SchedulePopup popLocation={popUp}
@@ -87,8 +87,8 @@ const InnerSchedule = (props) => {
             : (
               <>
                 <div key={y.id} id={y.id} 
-              onClick={y.confirmed === null ? getData : null}
-              className={y.confirmed === null ? "schdate" : "pending"}
+              onClick={y.confirmed !== true ? getData : null}
+              className={y.confirmed !== true ? "schdate" : "pending"}
               >{y.scheduled_date.toLocaleString()}</div>
                 {popUp.clicked
                   ? <SchedulePopup popLocation={popUp}

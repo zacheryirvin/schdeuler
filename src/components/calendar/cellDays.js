@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {PropTypes} from 'prop-types'
 import {connect} from 'react-redux'
 import {EstimateAppointment} from '../../classes/Appointments.js'
@@ -13,12 +13,18 @@ import {
 import {v4 as uuidv4} from 'uuid'
 import InnerSchedule from './innerSchedules.js'
 
+import {
+  initialMonthLoad
+} from '../../state/actions/appointmentActions.js'
+
 const CellDays = (props) => {
-  const [viewMonth, setViewMonth] = useState(
-    props.data.find(edge => {
+  const viewMonth = 
+    props.currentMonth.node !== undefined
+    ? props.currentMonth 
+    : props.data.find(edge => {
       return edge.node.month_number === getMonth(new Date())
     })
-  ) 
+
   const [toExpand, setToExpand] = useState({id: "",
     rerenderId: "",
     expanded: false})
@@ -86,15 +92,29 @@ const CellDays = (props) => {
 }
 
 const mstp = state => ({
-  estimateAppointments: state.appointments.estimateAppointments
+  estimateAppointments: state.appointments.estimateAppointments,
+  currentMonth: state.appointments.monthObj,
+  allMonths: state.appointments.allMonths
 })
 
 export default connect(
   mstp,
-  null
+  {initialMonthLoad} 
 )(CellDays);
 
 CellDays.propTypes = {
   estimateAppointments: PropTypes.array,
-  data: PropTypes.object
+  currentMonth: PropTypes.shape({
+    node: PropTypes.shape({
+      id: PropTypes.string,
+      month_calendar_cells: PropTypes.arrayOf(PropTypes.number),
+      month_calendar_null_cells: PropTypes.number,
+      month_name: PropTypes.string,
+      month_next: PropTypes.number,
+      month_number: PropTypes.number,
+      month_prev: PropTypes.number,
+    })
+  }),
+  allMonths: PropTypes.array,
+  data: PropTypes.array
 }

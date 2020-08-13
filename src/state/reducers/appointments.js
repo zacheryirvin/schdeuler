@@ -13,12 +13,18 @@ import {
   CONFIRMWORKINGAPPOINTMENT,
   DENYWORKINGAPPOINTMENT,
   EDITWORKINGAPPOINTMENT,
+  SETMONTH,
+  SETVIEWMONTH,
+  INITALMONTHLOAD,
 } from '../constants.js'
 
 
 const initialState = {
   estimateAppointments: {},
-  workingAppointments: {}
+  workingAppointments: {},
+  viewMonth: false,
+  allMonths: [],
+  monthObj: {},
 }
 
 for (let i = 0; i < 5; i++) {
@@ -98,6 +104,15 @@ const appointmentReducer = (state = initialState, action) => {
       const ewcopy = {...state}
       ewcopy.workingAppointments[eworkingId].scheduled_date = action.payload.scheduled_date
       return ewcopy;
+    case SETMONTH:
+      return {...state, monthObj: action.payload.month}
+    case SETVIEWMONTH:
+      return {...state, viewMonth: action.payload.view}
+    case INITALMONTHLOAD:
+      return {...state, viewMonth: action.payload.view,
+        allMonths: action.payload.data,
+        monthObj: action.payload.month
+      }
     default:
       return {...state}
   }

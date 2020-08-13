@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import {PropTypes} from 'prop-types'
 import {connect} from 'react-redux'
+import {navigate} from '@reach/router'
+import {Link} from 'gatsby'
 
 import {
   registerEstimateAppointment,
@@ -59,6 +61,7 @@ const SchedulePopup = ({popLocation,
   const confirm = (e) => {
     e.preventDefault()
     const outerParentId = e.target.parentElement.parentElement.parentElement.parentElement.id
+    let date;
     if(reschedual) {
       let oldId
       for(const key in appointments) {
@@ -66,14 +69,18 @@ const SchedulePopup = ({popLocation,
           oldId = key
           break
         }
+        date=appointments[id].scheduled_date.toLocaleString()
       }
       editEstimateAppoinment(oldId, id, current_user.id)
       setReschedual(false)
       updateRerenderId(outerParentId)
       cancel()
+      navigate('/successRequest', {state:{date}})
     }else if(setAppointmentCheck()) {
+      date = appointments[id].scheduled_date.toLocaleString()
       registerEstimateAppointment(id, current_user.id)
       cancel();
+      navigate('/successRequest', {state:{date}})
     } else {
       setErrorPop(true)
     }
@@ -128,7 +135,7 @@ const SchedulePopup = ({popLocation,
           {viewConfirm && !errorPop
             ? (
               <div className="buttonContainer">
-                <button className="confirm" onClick={confirm}>Confirm</button>
+                <button className="request" onClick={confirm}>Request</button>
                 <button className="cancel" onClick={innercancel}>Cancel</button>
               </div>
             )

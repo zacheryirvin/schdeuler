@@ -1,12 +1,16 @@
 import React from "react"
 import { Link } from "gatsby"
+import {connect} from 'react-redux'
+import {PropTypes} from 'prop-types'
 
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
 
+import {setViewing} from '../state/actions/appointmentActions.js'
+
 const IndexPage = (props) => {
-  console.log(props)
+  props.setViewing(false)
   return (
     <Layout>
       <SEO title="Home" />
@@ -23,4 +27,8 @@ const IndexPage = (props) => {
   )
 }
 
-export default IndexPage
+export default connect(null, {setViewing})(IndexPage)
+
+IndexPage.propTypes = {
+  setViewing: PropTypes.func,
+}

@@ -12,6 +12,9 @@ import {
   CONFIRMWORKINGAPPOINTMENT,
   DENYWORKINGAPPOINTMENT,
   EDITWORKINGAPPOINTMENT,
+  SETMONTH,
+  SETVIEWMONTH,
+  INITALMONTHLOAD,
 } from '../constants.js'
 
 export const addEstimateAppointment = (app) => {
@@ -42,4 +45,16 @@ export const confirmWorkingAppointment = (id) => {
 
 export const editWorkingAppointment = (id, scheduled_date) => {
   return {type: EDITWORKINGAPPOINTMENT, payload: {id: id, scheduled_date}}
+}
+
+export const setMonth = (month) => {
+  return {type: SETMONTH, payload: {month}}
+}
+
+export const setViewing = (view) => {
+  return {type: SETVIEWMONTH, payload: {view}}
+}
+
+export const initialMonthLoad = (view, data, month) => {
+  return {type: INITALMONTHLOAD, payload: {view, data, month}}
 }

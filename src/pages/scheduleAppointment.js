@@ -1,9 +1,16 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {PropTypes} from 'prop-types'
 import {graphql} from 'gatsby'
+import {connect} from 'react-redux'
 
 import Layout from '../components/layout.js'
 import Calendar from '../components/calendar/calendar.js' 
+
+import {initialMonthLoad} from '../state/actions/appointmentActions.js'
+
+import {
+  getMonth
+} from 'date-fns'
 
 export const query = graphql`
   query CalendarQuery {
@@ -23,7 +30,18 @@ export const query = graphql`
   }
 `
 
-const CustomerScheduler = ({data}) => {
+const CustomerScheduler = ({data, initialMonthLoad}) => {
+
+  const viewMonth = 
+    data.allMonth.edges.find(edge => {
+      return edge.node.month_number === getMonth(new Date())
+    })
+   
+
+  useEffect(() => {
+    initialMonthLoad(true, data.allMonth.edges, viewMonth)
+  },[])
+
   return (
     <>
       <Layout>
@@ -33,8 +51,10 @@ const CustomerScheduler = ({data}) => {
   )
 }
 
-export default CustomerScheduler;
+// export default CustomerScheduler;
+export default connect(null,{initialMonthLoad})(CustomerScheduler)
 
 CustomerScheduler.propTypes = {
-  data: PropTypes.object
+  data: PropTypes.object,
+  initialMonthLoad: PropTypes.func.isRequired
 }

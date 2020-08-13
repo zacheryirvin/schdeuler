@@ -3,22 +3,35 @@ header {
   // background-color: $header_background;
   border-radius: 5px;
   // margin-bottom: 15px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   border-bottom: 1px solid $dark_border_accent;
-  display: flex;
   justify-content: space-between;
+  align-items: center;
+  display: flex;
+  width: 100%;
 
   .leftContainer {
     width: 200px;
     display: flex;
     justify-content: space-between;
+    margin-left: 30px;
 
   }
 
   .rightContainer {
-    width: 300px;
-    text-align: right;
+    display: flex;
+    width: 150px;
+    justify-content: space-between;
+    margin-right: 30px;
+
+    .changeMonth {
+      font-size: 1.3rem;
+    }
+
+    p {
+      margin-bottom: 0px;
+    }
   }
 
   a {
