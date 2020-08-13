@@ -11,7 +11,7 @@ const Calender = (props) => {
   return (
     <div className="calendarContainer">
       <DaysOfWeek/>
-      <CellDays data={props.data}/>
+      <CellDays data={props.data} admin={props.admin}/>
     </div>
   )
 }
@@ -21,5 +21,6 @@ export default Calender;
 Calender.propTypes = {
   data: PropTypes.objectOf(
     PropTypes.array
-  )
+  ),
+  admin: PropTypes.bool,
 }

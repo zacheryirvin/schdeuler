@@ -46,13 +46,12 @@ const SchedulePopup = ({popLocation,
   const setAppointmentCheck = () => {
     let returnBool = true
     for(const key in appointments) {
-      if(appointments[key].user_id === current_user.id) {
+      if(appointments[key].user_id.includes(current_user.id)) {
         returnBool = false
       }
     }
     return returnBool
   }
-
 
   const innercancel = (e) => {
     cancel()
@@ -65,12 +64,12 @@ const SchedulePopup = ({popLocation,
     if(reschedual) {
       let oldId
       for(const key in appointments) {
-        if(appointments[key].user_id === current_user.id) {
+        if(appointments[key].user_id.includes(current_user.id)) {
           oldId = key
           break
         }
-        date=appointments[id].scheduled_date.toLocaleString()
       }
+      date=appointments[id].scheduled_date.toLocaleString()
       editEstimateAppoinment(oldId, id, current_user.id)
       setReschedual(false)
       updateRerenderId(outerParentId)

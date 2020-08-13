@@ -34,6 +34,7 @@ const Header = ({ siteTitle,
       <div className="leftContainer">
         <Link to="/">Home</Link>
         <Link to="/scheduleAppointment">Scheduler</Link>
+        <Link to="/schedule">test</Link>
       </div>
     {viewMonth
       ?(

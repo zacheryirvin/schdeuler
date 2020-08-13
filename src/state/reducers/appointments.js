@@ -32,15 +32,15 @@ for (let i = 0; i < 5; i++) {
   let friday = new Date(2020, 8, 14)
   date.setHours(i)
   friday.setHours(i)
-  const temp = (new EstimateAppointment(uuidv4(), null, date, null));  
-  const tempTwo = (new EstimateAppointment(uuidv4(), null, friday, null));  
+  const temp = (new EstimateAppointment(uuidv4(), [], date, null));  
+  const tempTwo = (new EstimateAppointment(uuidv4(), [], friday, null));  
   initialState.estimateAppointments[temp.id] = temp;
   initialState.estimateAppointments[tempTwo.id] = tempTwo;
 }
 
 const estimateAppointmentSchema = {
   id: PropTypes.string.isRequired,
-  user_id: PropTypes.string.isRequired,
+  user_id: PropTypes.arrayOf(PropTypes.string).isRequired,
   scheduled_date: PropTypes.string.isRequired,
   confirmed: PropTypes.bool.isRequired,
 }
@@ -77,17 +77,21 @@ const appointmentReducer = (state = initialState, action) => {
     case REGISTERESTIMATEAPPOINTMENT:
       const restimateId = action.payload.id;
       const rcopy = {...state}
-      rcopy.estimateAppointments[restimateId].user_id = action.payload.user_id
       rcopy.estimateAppointments[restimateId].confirmed = action.payload.confirmed
+      rcopy.estimateAppointments[restimateId].user_id.push(action.payload.user_id)
       return rcopy
     case EDITESTIMATEAPPOINTMENT:
       const eestimateId = action.payload.id;
       const neweestimateId = action.payload.newId;
       const ecopy = {...state}
-      ecopy.estimateAppointments[eestimateId].confirmed = null 
-      ecopy.estimateAppointments[eestimateId].user_id = null
-      ecopy.estimateAppointments[neweestimateId].user_id = action.payload.user_id
+      ecopy.estimateAppointments[eestimateId].user_id = ecopy.estimateAppointments[eestimateId].user_id.filter(userId => {
+        return userId !== action.payload.user_id
+      })
+      ecopy.estimateAppointments[neweestimateId].user_id.push(action.payload.user_id)
       ecopy.estimateAppointments[neweestimateId].confirmed = action.payload.confirmed
+      ecopy.estimateAppointments[eestimateId].user_id.length > 0
+        ? ecopy.estimateAppointments[eestimateId].confirmed = false
+        : ecopy.estimateAppointments[eestimateId].confirmed = null
       return ecopy;
     case ADDWORKINGAPPOINTMENT:
       const newWorkingAppointmentId = action.payload.id;

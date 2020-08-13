@@ -50,60 +50,130 @@ const InnerSchedule = (props) => {
   let counter = 0
   return (
     <>
-      {expanded.ex
-        ? 
-          <>
-            {props.eAppointments.map((y, ind) => {
-              if(y.scheduled_date.getDate() === (props.index - props.nullCells)) {
-                counter++
-                return (
-                  <>
-                    <div key={y.id} id={y.id} 
-                    className={y.confirmed !== true ? "schdate" : "pending"}
-                    onClick={y.confirmed !== true ? getData : null}
-                    >{y.scheduled_date.toLocaleString()} </div> 
-                    {popUp.clicked
-                      ? <SchedulePopup popLocation={popUp}
-                      check_id={y.id} cancel={cancel}
-                      updateRerenderId={props.updateRerenderId}
-                      />
-                    : null
-                    }
-                  </>
-                )
-              }
-            })}
-            <div className="numberMore" onClick={expand}>...close</div>
-          </>
-        : 
+    {!props.admin
+      ? (
       <>
-      {props.eAppointments.map((y, ind) => {
-        if(y.scheduled_date.getDate() === (props.index - props.nullCells)) {
-          counter++
-          return (counter > 4)
-            ? (
-              <div key={uuidv4()} className="numberMore" onClick={expand}>...{counter - 4} More</div> 
-            )
-            : (
-              <>
-                <div key={y.id} id={y.id} 
-              onClick={y.confirmed !== true ? getData : null}
-              className={y.confirmed !== true ? "schdate" : "pending"}
-              >{y.scheduled_date.toLocaleString()}</div>
-                {popUp.clicked
-                  ? <SchedulePopup popLocation={popUp}
-                  check_id={y.id}
-                  cancel={cancel}
-                  updateRerenderId={props.updateRerenderId}
-                  />
-                : null
+        {expanded.ex
+          ? 
+            <>
+              {props.eAppointments.map((y, ind) => {
+                if(y.scheduled_date.getDate() === (props.index - props.nullCells)) {
+                  counter++
+                  return (
+                    <>
+                      <div key={y.id} id={y.id} 
+                      className={y.confirmed !== true ? "schdate" : "consumerConfirmed"}
+                      onClick={y.confirmed !== true ? getData : null}
+                      >{y.scheduled_date.toLocaleString()} </div> 
+                      {popUp.clicked
+                        ? <SchedulePopup popLocation={popUp}
+                        check_id={y.id} cancel={cancel}
+                        updateRerenderId={props.updateRerenderId}
+                        />
+                      : null
+                      }
+                    </>
+                  )
                 }
-              </>
-            )
+              })}
+              <div className="numberMore" onClick={expand}>...close</div>
+            </>
+          : 
+        <>
+        {props.eAppointments.map((y, ind) => {
+          if(y.scheduled_date.getDate() === (props.index - props.nullCells)) {
+            counter++
+            return (counter > 4)
+              ? (
+                <div key={uuidv4()} className="numberMore" onClick={expand}>...{counter - 4} More</div> 
+              )
+              : (
+                <>
+                  <div key={y.id} id={y.id} 
+                onClick={y.confirmed !== true ? getData : null}
+                className={y.confirmed !== true ? "schdate" : "consumerConfirmed"}
+                >{y.scheduled_date.toLocaleString()}</div>
+                  {popUp.clicked
+                    ? <SchedulePopup popLocation={popUp}
+                    check_id={y.id}
+                    cancel={cancel}
+                    updateRerenderId={props.updateRerenderId}
+                    />
+                  : null
+                  }
+                </>
+              )
+          }
+        })}
+        </>
         }
-      })}
       </>
-      }
+      )
+      : (
+      <>
+        {expanded.ex
+          ? 
+            <>
+              {props.eAppointments.map((y, ind) => {
+                if(y.scheduled_date.getDate() === (props.index - props.nullCells)) {
+                  counter++
+                  return (
+                    <>
+                      <div key={y.id} id={y.id} 
+                    className={y.confirmed === null ? "schdate" 
+                      : y.confirmed === false ? "adminpending"
+                      : "adminconfirmed"
+                      }
+                      onClick={y.confirmed !== true ? getData : null}
+                      >{y.scheduled_date.toLocaleString()} </div> 
+                      {popUp.clicked
+                        ? <SchedulePopup popLocation={popUp}
+                        check_id={y.id} cancel={cancel}
+                        updateRerenderId={props.updateRerenderId}
+                        />
+                      : null
+                      }
+                    </>
+                  )
+                }
+              })}
+              <div className="numberMore" onClick={expand}>...close</div>
+            </>
+          : 
+        <>
+        {props.eAppointments.map((y, ind) => {
+          if(y.scheduled_date.getDate() === (props.index - props.nullCells)) {
+            counter++
+            return (counter > 4)
+              ? (
+                <div key={uuidv4()} className="numberMore" onClick={expand}>...{counter - 4} More</div> 
+              )
+              : (
+                <>
+                  <div key={y.id} id={y.id} 
+                onClick={y.confirmed !== true ? getData : null}
+                className={y.confirmed === null ? "schdate" 
+                  : y.confirmed === false ? "adminpending"
+                  : "adminconfirmed"
+                }
+                >{y.scheduled_date.toLocaleString()}</div>
+                  {popUp.clicked
+                    ? <SchedulePopup popLocation={popUp}
+                    check_id={y.id}
+                    cancel={cancel}
+                    updateRerenderId={props.updateRerenderId}
+                    />
+                  : null
+                  }
+                </>
+              )
+          }
+        })}
+        </>
+        }
+      </>
+      )
+    }
     </>
   )
 }
